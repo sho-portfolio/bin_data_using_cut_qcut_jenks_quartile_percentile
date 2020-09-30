@@ -70,7 +70,8 @@ df['cut_10'] = cut_10[0]
 df['jenks_04'] = jenks_04[0]
 df['jenks_10'] = jenks_10[0]
 
-display(df)
+with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # show the entire dataset
+    display(df.sort_values(by='score'))
 
 # note that jenks_10 looks silly but thats becuase we forced it create 10 bins, 
 # when we asked it to create 4 bins it looks a lot better
