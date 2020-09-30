@@ -7,8 +7,8 @@ using python to bin data using cut, qcut and jenks optimization (quartile, perce
 
 # Three tdifferent functions to bucketize data
   # qcut - split observations (data) into equal sized bins (regrdless of the values)
-  # cut - split observations into equally dispersed bins (ie use the values)
-  # jenks optimization - split the observations into natural breaks
+  # cut - split observations into dispersed bins based on value of the observation (bins are created on the range of the values of the observations) - some bins can have zero observations and a bin can most of the observations for instance
+  # jenks optimization - identify natural groupings of numbers that are “close” together while also maximizing the distance between the other groupings (bins)
 
 # resources
   # https://pbpython.com/natural-breaks.html
