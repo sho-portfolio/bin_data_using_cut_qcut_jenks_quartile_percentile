@@ -77,5 +77,4 @@ display(df)
 ```
 
 
-![image](https://user-images.githubusercontent.com/40234177/94735209-6277c380-0338-11eb-83ac-4fa58755951a.png)
-
+![image](https://user-images.githubusercontent.com/40234177/94735209-6277c380-0338-11eb-83ac-4fa58755951a.png){:height="50%" width="50%"}
