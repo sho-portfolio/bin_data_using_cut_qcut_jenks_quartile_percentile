@@ -44,7 +44,8 @@ breaks_04 = jenkspy.jenks_breaks(a, nb_class=4)
 jenks_04 = pd.cut(a, bins=breaks_04, labels=[1,2,3,4], include_lowest=True, retbins=True)
 
 breaks_10 = jenkspy.jenks_breaks(a, nb_class=10)
-jenks_10 = pd.cut(a, bins=breaks_10, labels=[1,2,3,4,5,6,7,8,9], include_lowest=True, duplicates='drop', retbins=True)
+jenks_10 = pd.cut(a, bins=breaks_10, labels=[1,2,3,4,5,6,7,8,9], include_lowest=True, duplicates='drop', retbins=True) 
+# note that there are only 9 labels - had to do this to avoind error! (unsure why as of yet)
 
 
 # display the bins computed by qcut for 4 and 10 bins
