@@ -98,6 +98,7 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):  
 
 
 <h3> testing qcut </h3>
+Results summary - with qcut, you can specify the number of bins you want but you can't guarentee that that is how many you will get
 
 ```python
 
