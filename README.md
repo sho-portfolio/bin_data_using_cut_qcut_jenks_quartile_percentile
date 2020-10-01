@@ -97,7 +97,7 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):  
 
 
 
-<h3> testing qcut </h3>
+<h3>Testing qcut </h3>
 Results summary - with qcut, you can specify the number of bins you want but you can't guarentee that that is how many you will get
 
 ```python
@@ -191,4 +191,37 @@ build_output2(x, q, edge, bin, bin_label, note)
 
 ```
 
+<h3>Testing cut </h3>
+```python
+# cut chooses the bins to be evenly spaced according to the values themselves 
 
+import pandas as pd
+
+def build_output_cut(x, bins, edge, bin, bin_label):
+    
+    print("-------------------------------------------------------------------------"'\n')
+
+    df = pd.DataFrame(x, columns=['observation']) # convert list to dataframe
+    df['bin_label'] = bin_label # add the bin labels to the dataframe
+    df['edge'] = edge # add the bin edge values to the dataframe
+    df['obs_per_bin_label']= df.bin_label.map(df.bin_label.value_counts()) # add the count of observations in each bin
+
+    print(" observations:\t", x, "\n", "bin edges:\t", bin, '\n', "bin count:\t", len(bin)-1, '\n', "bins reqstd:\t", bins, '\n')
+
+    display(df.sort_values(by='bin_label'))
+    print("-------------------------------------------------------------------------"'\n')
+
+
+x = [1, 2, 3, 4, 5, 10, 99, 10, 1000,10000]
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10]
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+bins=10
+lbl = list(range(1,bins+1)) #creates a list from 1 to bins
+
+edge, bin = pd.cut(x, bins=bins, retbins=True, duplicates='raise')
+bin_label, bin_b = pd.cut(x, bins=bins, retbins=True, labels=lbl, duplicates='raise')
+
+build_output_cut(x, bins, edge, bin, bin_label)
+
+```
