@@ -192,7 +192,9 @@ build_output2(x, q, edge, bin, bin_label, note)
 ```
 
 <h3>Testing cut </h3>
+
 ```python
+
 # cut chooses the bins to be evenly spaced according to the values themselves 
 
 import pandas as pd
