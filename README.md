@@ -126,7 +126,6 @@ def build_output2(x, q, edge, bin, bin_label, note):
     print(" note:\n", note, "\n\n", "observations:\t", x, "\n", "bin edges:\t", bin, '\n', "bin count:\t", len(bin)-1, '\n', "bins reqstd:\t", q, '\n')
 
     display(df)
-    df['bin_label'].value_counts()    
     print("-------------------------------------------------------------------------"'\n')
 
 note = "[1] if you have 10 non-duplicate observations & you want to place them in 10 bins. qcut creates 10 bins and places an equal number of observations in each bin"
