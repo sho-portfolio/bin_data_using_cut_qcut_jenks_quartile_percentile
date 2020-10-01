@@ -102,7 +102,6 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):  
 # qcut takes your list of observations and will try to put an equal number of observations (x) into each bucket.
 # you have to specify the number of buckets (q)
 
-
 def build_output2(x, q, edge, bin, bin_label, note):
     
     print("-------------------------------------------------------------------------"'\n')
