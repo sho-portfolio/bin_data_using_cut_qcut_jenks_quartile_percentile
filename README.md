@@ -98,6 +98,7 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):  
 
 
 <h3> testing qcut </h3>
+
 ```python
 
 #qcut takes your list of observations and will try to put an equal number of observations (x) into each bucket.
