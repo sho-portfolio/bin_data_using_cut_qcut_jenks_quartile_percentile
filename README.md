@@ -4,11 +4,19 @@ using python to bin data using cut, qcut and jenks optimization (quartile, perce
 
 ```python
 
-# Three tdifferent functions to bucketize data
+# Three different functions to bucketize data
   # qcut - split observations (data) into equal sized bins (regrdless of the values)
-  # cut - split observations into dispersed bins based on value of the observation (bins are created on the range of the values of the observations) - some bins can have zero observations and a bin can most of the observations for instance
-  # jenks optimization - identify natural groupings of numbers that are “close” together while also maximizing the distance between the other groupings (bins) - tbd but may be similar to cut except that it will put observations into as many bins as specified (whereas cut can have empty bins)
+    # - you specify the number of bins (q)
+    # - qcut will create bins of equal size (i.e. bin1 0-2, bin2 2-4 etc)
+    # - it may not create the number of bins you specify for q below will create only 9 bins
+    #.     pd.qcut(x=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10], q=10, duplicates='drop')
+ # cut - split observations into dispersed bins based on value of the observation
+ # jenks optimization - split the observations into natural breaks
 
+# cut vs qcut
+   # cut chooses the bins to be evenly spaced according to the values themselves 
+   # qcut chooses the bins so that you have the same number of records in each bin
+    
 # resources
   # https://pbpython.com/natural-breaks.html
   # https://pbpython.com/pandas-qcut-cut.html
@@ -86,5 +94,99 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):  
 ```
 
 <img src="https://user-images.githubusercontent.com/40234177/94735209-6277c380-0338-11eb-83ac-4fa58755951a.png" width=50% height=50%>
+
+
+
+<h3> testing qcut </h3>
+```python
+# qcut takes your list of observations and will try to put an equal number of observations (x) into each bucket.
+# you have to specify the number of buckets (q)
+
+
+def build_output2(x, q, edge, bin, bin_label, note):
+    
+    print("-------------------------------------------------------------------------"'\n')
+
+    df = pd.DataFrame(x, columns=['observation'])
+    df['bin_label'] = bin_label
+    df['edge'] = edge
+
+    #df['obs_per_bin_label'] = pd.Series(bin_label).value_counts()
+    #df['obs_per_bin_label'] = df['bin_label'].value_counts()  
+    df['obs_per_bin_label']= df.bin_label.map(df.bin_label.value_counts())
+
+    #display(pd.Series(bin_label).value_counts()) #shows how many observations were put into each bin
+
+    #print(" observation-bin: ", out, '\n', "bin edges: ", bin, '\n', "bin count: ", len(bin)-1)
+    print(" note:\n", note, "\n\n", "observations:\t", x, "\n", "bin edges:\t", bin, '\n', "bin count:\t", len(bin)-1, '\n', "bins reqstd:\t", q, '\n')
+
+    display(df)
+    df['bin_label'].value_counts()    
+    print("-------------------------------------------------------------------------"'\n')
+
+    
+# 1
+note = "[1] if you have 10 non-duplicate observations & you want to place them in 10 bins. qcut creates 10 bins and places an equal number of observations in each bin"
+x = [1,2,3,4,5,6,7,8,9,10]
+q=10
+edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='raise')
+bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='raise')
+build_output2(x, q, edge, bin, bin_label, note)
+
+# 2
+note = "[2] now what happens if we have more observations than bins. qcut puts 2 observations in one bin as its the best it can do (see bin 0)"
+x = [1,2,3,4,5,6,7,8,9,10,11]
+q=10
+edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='raise')
+bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='raise')
+build_output2(x, q, edge, bin, bin_label, note)
+
+# 3
+note = "[3] what happens when we have fewer observations than bins. qcut puts 1 observation in one bin but skips a bin (see bin 5!)"
+x = [1,2,3,4,5,6,7,8,9]
+q=10
+edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='raise')
+bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='raise')
+build_output2(x, q, edge, bin, bin_label, note)
+
+# 4
+try:
+    note = "[4] what happens when we have a duplicate observation? We get an error!"
+    x = [1,2,3,4,5,6,7,8,9,10,10]
+    q=10
+    edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='raise')
+    bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='raise')
+    build_output2(x, q, edge, bin, bin_label, note)
+except Exception as e:
+    print(" note:\n", note, '\n', " Error: ", e)
+    
+    
+# 4.1
+note = "[4.1] so to fix it we add an additional paramter [duplicates='drop'].  notice that it used 9 bins only"
+x = [1,2,3,4,5,6,7,8,9,10,10]
+q=10
+edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='drop')
+bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='drop')
+build_output2(x, q, edge, bin, bin_label, note)
+
+
+# 5
+note = "[5] what happens when we have all observations with the same value (this is silly but whatever)"
+x = [10,10,10,10,10,10]
+q=10
+edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='drop')
+bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='drop')
+build_output2(x, q, edge, bin, bin_label, note)
+
+
+# 6
+note = "[6] how to qcut a a series/dataframe"
+x = dfS_01['some_column_name'].tolist()
+q=10
+edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='drop')
+bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='drop')
+build_output2(x, q, edge, bin, bin_label, note)
+
+```
 
 
