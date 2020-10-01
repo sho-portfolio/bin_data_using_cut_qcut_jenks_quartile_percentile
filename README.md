@@ -125,7 +125,7 @@ def build_output2(x, q, edge, bin, bin_label, note):
     print("-------------------------------------------------------------------------"'\n')
 
     
-# 1
+#1
 note = "[1] if you have 10 non-duplicate observations & you want to place them in 10 bins. qcut creates 10 bins and places an equal number of observations in each bin"
 x = [1,2,3,4,5,6,7,8,9,10]
 q=10
@@ -133,7 +133,7 @@ edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='raise')
 bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='raise')
 build_output2(x, q, edge, bin, bin_label, note)
 
-# 2
+#2
 note = "[2] now what happens if we have more observations than bins. qcut puts 2 observations in one bin as its the best it can do (see bin 0)"
 x = [1,2,3,4,5,6,7,8,9,10,11]
 q=10
@@ -141,7 +141,7 @@ edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='raise')
 bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='raise')
 build_output2(x, q, edge, bin, bin_label, note)
 
-# 3
+#3
 note = "[3] what happens when we have fewer observations than bins. qcut puts 1 observation in one bin but skips a bin (see bin 5!)"
 x = [1,2,3,4,5,6,7,8,9]
 q=10
@@ -149,7 +149,7 @@ edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='raise')
 bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='raise')
 build_output2(x, q, edge, bin, bin_label, note)
 
-# 4
+#4
 try:
     note = "[4] what happens when we have a duplicate observation? We get an error!"
     x = [1,2,3,4,5,6,7,8,9,10,10]
@@ -161,7 +161,7 @@ except Exception as e:
     print(" note:\n", note, '\n', " Error: ", e)
     
     
-# 4.1
+#4.1
 note = "[4.1] so to fix it we add an additional paramter [duplicates='drop'].  notice that it used 9 bins only"
 x = [1,2,3,4,5,6,7,8,9,10,10]
 q=10
@@ -170,7 +170,7 @@ bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='drop'
 build_output2(x, q, edge, bin, bin_label, note)
 
 
-# 5
+#5
 note = "[5] what happens when we have all observations with the same value (this is silly but whatever)"
 x = [10,10,10,10,10,10]
 q=10
@@ -179,7 +179,7 @@ bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='drop'
 build_output2(x, q, edge, bin, bin_label, note)
 
 
-# 6
+#6
 note = "[6] how to qcut a a series/dataframe"
 x = dfS_01['some_column_name'].tolist()
 q=10
