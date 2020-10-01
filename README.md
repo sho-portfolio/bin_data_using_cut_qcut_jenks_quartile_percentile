@@ -104,6 +104,9 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):  
 #qcut takes your list of observations and will try to put an equal number of observations (x) into each bucket.
 #you have to specify the number of buckets (q)
 
+
+import pandas as pd
+
 def build_output2(x, q, edge, bin, bin_label, note):
     
     print("-------------------------------------------------------------------------"'\n')
@@ -180,7 +183,7 @@ build_output2(x, q, edge, bin, bin_label, note)
 
 #6
 note = "[6] how to qcut a a series/dataframe"
-x = dfS_01['some_column_name'].tolist()
+x = df['some_column_name'].tolist()
 q=10
 edge, bin = pd.qcut(x, q=q, retbins=True, duplicates='drop')
 bin_label, bin_b = pd.qcut(x, q=q, labels=False, retbins=True, duplicates='drop')
