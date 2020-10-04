@@ -227,3 +227,98 @@ bin_label, bin_b = pd.cut(x, bins=bins, retbins=True, labels=lbl, duplicates='ra
 build_output_cut(x, bins, edge, bin, bin_label)
 
 ```
+
+
+
+<h3>Testing cut </h3>
+
+```python
+
+
+def observations_cut(observations, bins):
+
+    labels = list(range(1,bins+1)) #creates a list from 1 to bins
+
+    edge, bin = pd.cut(observations, bins=bins, retbins=True, duplicates='drop')
+    bin_label, bin_b = pd.cut(observations, bins=bins, retbins=True, labels=labels, duplicates='drop')
+    
+    return edge, bin, bin_label
+
+    # edge is the bin edge per data element (i.e. the count of this is equal to the count of observations)
+    # bin_label is the bin that each observation has been put in(i.e. the count of this is equal to the count of observations)
+    # bin is an array showing the distance between each bin (i.e. size of each bin)
+    #    len(bin)-1 gives the number of bins
+
+    # pd.cut is called twice as:
+    #    if we pass labels=labels it doesn't always give is the number of bins that we requested (tbd) OR we can't
+    #    get both the edge and bin_label (you can only get one or the other)
+    
+    
+    # Usage example:
+    # observations = [1,2,3,4,5,6,7,8,10,10,200,500] # df['col'].to_list()
+    # observations = [20,50,75,950,1100,1400,1500,2100,4200,4300,4400] # jenks handles this better when ie. bins=4
+    # edge, bin, bin_label = get_cut(observations, 10)
+
+    # print(sorted(observations), '\n\n') # shows all the observations - sorted
+    # print(sorted(edge), '\n\n')         # shows the bin (upper and lower bound) that the observation will be put in
+    # print(bin.astype(int), '\n\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+    # print(len(bin)-1, '\n\n')           # shows the number of bins
+    # print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+
+
+import jenkspy
+
+def observations_jenks(observations, bins):
+
+    labels = list(range(1,bins+1)) #creates a list from 1 to bins
+
+    edge = jenkspy.jenks_breaks(observations, nb_class=bins)
+    bin_label, bin_b = pd.cut(observations, bins=edge, labels=labels, include_lowest=True, duplicates='drop', retbins=True)
+
+    return edge, bin, bin_label
+
+    # edge is the bin edge per data element (i.e. the count of this is equal to the count of observations)
+    # bin_label is the bin that each observation has been put in(i.e. the count of this is equal to the count of observations)
+    # bin is an array showing the distance between each bin (i.e. size of each bin)
+    #    len(bin)-1 gives the number of bins
+
+    # pd.cut is called twice as:
+    #    if we pass labels=labels it doesn't always give is the number of bins that we requested (tbd) OR we can't
+    #    get both the edge and bin_label (you can only get one or the other)
+    
+    
+    # Usage example:
+    # observations = [1,2,3,4,5,6,7,8,9,10,10,500] # df['col'].to_list()
+    # observations = [20,50,75,950,1100,1400,1500,2100,4200,4300,4400] # jenks handles this better when ie. bins=4
+    # edge, bin, bin_label = observations_jenks(observations, 10)
+
+    # print(sorted(observations), '\n\n') # shows all the observations - sorted
+    # print(sorted(edge), '\n\n')         # shows the bin (upper and lower bound) that the observation will be put in
+    # print(bin.astype(int), '\n\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+    # print(len(bin)-1, '\n\n')           # shows the number of bins
+    # print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+
+#example (of pd.cut vs. jenks)
+
+observations = [20,50,75,950,1100,1400,1500,2100,4200,4300,4400] # jenks handles this better when bins=4
+
+# pd.cut
+edge, bin, bin_label = observations_cut(observations, 4)
+
+print(sorted(edge), '\n\n')         # shows the bin (upper and lower bound) that the observation will be put in
+print(bin.astype(int), '\n\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+print(len(bin)-1, '\n\n')           # shows the number of bins
+print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+
+
+# jenks
+edge, bin, bin_label = observations_jenks(observations, 4)
+
+print(sorted(edge), '\n\n')         # shows the bin (upper and lower bound) that the observation will be put in
+print(bin.astype(int), '\n\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+print(len(bin)-1, '\n\n')           # shows the number of bins
+print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+
+```
+
+```
