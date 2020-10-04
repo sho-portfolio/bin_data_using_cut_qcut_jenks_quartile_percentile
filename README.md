@@ -230,7 +230,7 @@ build_output_cut(x, bins, edge, bin, bin_label)
 
 
 
-<h3>Testing cut </h3>
+<h3>pd.cut vs. jenks</h3>
 
 ```python
 
