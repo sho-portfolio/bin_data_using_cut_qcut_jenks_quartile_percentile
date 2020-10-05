@@ -298,4 +298,102 @@ print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation
 
 ```
 
+<h3>Reusable Code to Apply Bins to a dataset (list of dataframe)</h3>
+
+
+```python
+import jenkspy
+
+def observations_cut(observations, bins):
+
+    labels = list(range(1,bins+1)) #creates a list from 1 to bins
+
+    edge, bin = pd.cut(observations, bins=bins, retbins=True, duplicates='drop')
+    bin_label, bin_b = pd.cut(observations, bins=bins, retbins=True, labels=labels, duplicates='drop')
+    
+    return edge, bin, bin_label
+
+
+def observations_jenks(observations, bins):
+
+    #had to add unique as sometimes edge_j contains dupes and then it fails (also unique only works for dataframes/series not for lists)
+    if type(observations) == list:
+        observations_unique = list(set(observations))
+    if type(observations) == pd.core.series.Series:
+        observations_unique = observations.unique()  
+
+    labels = list(range(1,bins+1)) #creates a list from 1 to bins
+
+    edge_j = jenkspy.jenks_breaks(observations_unique, nb_class=bins) 
+
+    edge, bin = pd.cut(observations, bins=edge_j, duplicates='drop', include_lowest=True, retbins=True)
+    bin_label, bin_b = pd.cut(observations, bins=edge_j, labels=labels, include_lowest=True, duplicates='drop', retbins=True)
+
+    return edge, bin, bin_label
+
+
+
+# example (of pd.cut vs. jenks)
+
+observations = [20,50,75,950,1100,1400,1500,2100,4200,4300,4400] # jenks handles this better when bins=4
+
+# pd.cut
+edge, bin, bin_label = observations_cut(observations, 4)
+
+print("obs count:\t", len(observations), '\n')
+print("obs edge:\t", sorted(edge), '\n')         # shows the bin (upper and lower bound) that the observation will be put in
+print("bins:\t\t", bin.astype(int), '\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+print("bin cnt:\t",len(bin)-1, '\n')           # shows the number of bins
+print("obs bin lbl:\t", sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+
+
+# jenks
+edge, bin, bin_label = observations_jenks(observations, 4)
+
+print(sorted(edge), '\n\n')         # shows the bin (upper and lower bound) that the observation will be put in
+print(bin.astype(int), '\n\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+print(len(bin)-1, '\n\n')           # shows the number of bins
+print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+
+
+# for each column in the dataframe create bins (and ancilliary columns)
+
+df = dfS_01.copy()
+df_copy = dfS_01.copy()
+
+for column in df_copy:
+    print(column)
+    col = df_copy[column]
+    col_unique = df_copy[column].unique()
+
+    # calling cut 4
+    edge, bin, bin_label = observations_cut(col, 4)
+    df[column+'_pdcut_04_edge'] = edge # add the bin edge values to the dataframe
+    df[column+'_pdcut_04_bin'] = bin_label # add the bin labels to the dataframe
+    df[column+'_pdcut_04_obs_per_bin'] = edge.map(edge.value_counts()) # add the count of observations in each bin
+    
+    # calling cut 10
+    edge, bin, bin_label = observations_cut(col, 10)
+    df[column+'_pdcut_10_edge'] = edge # add the bin edge values to the dataframe
+    df[column+'_pdcut_10_bin'] = bin_label # add the bin labels to the dataframe
+    df[column+'_pdcut_10_obs_per_bin'] = edge.map(edge.value_counts()) # add the count of observations in each bin
+    
+    # calling jenks 4
+    edge, bin, bin_label = observations_jenks(col, 4)
+    df[column+'_jenks_04_edge'] = edge # add the bin edge values to the dataframe
+    df[column+'_jenks_04_bin'] = bin_label # add the bin labels to the dataframe
+    df[column+'_jenks_04_obs_per_bin'] = edge.map(edge.value_counts()) # add the count of observations in each bin
+    
+    # calling jenks 10
+    edge, bin, bin_label = observations_jenks(col, 10)    
+    df[column+'_jenks_10_edge'] = edge # add the bin edge values to the dataframe
+    df[column+'_jenks_10_bin'] = bin_label # add the bin labels to the dataframe
+    df[column+'_jenks_10_obs_per_bin'] = edge.map(edge.value_counts()) # add the count of observations in each bin
+
+    
+df = df.reindex(sorted(df.columns), axis=1)  #order dataframe columns by name    
+
+display(df)
+df.to_csv('MyFile.csv')
+
 ```
