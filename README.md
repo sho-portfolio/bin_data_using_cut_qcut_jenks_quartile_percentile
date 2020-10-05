@@ -275,26 +275,29 @@ def observations_jenks(observations, bins):
     #    get both the edge and bin_label (you can only get one or the other)
 
 
-#example (of pd.cut vs. jenks)
+# example (of pd.cut vs. jenks)
 
 observations = [20,50,75,950,1100,1400,1500,2100,4200,4300,4400] # jenks handles this better when bins=4
 
 # pd.cut
 edge, bin, bin_label = observations_cut(observations, 4)
 
-print(sorted(edge), '\n\n')         # shows the bin (upper and lower bound) that the observation will be put in
-print(bin.astype(int), '\n\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
-print(len(bin)-1, '\n\n')           # shows the number of bins
-print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+print("obs count:\t", len(observations), '\n')
+print("obs edge:\t", sorted(edge), '\n')         # shows the bin (upper and lower bound) that the observation will be put in
+print("bins:\t\t", bin.astype(int), '\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+print("bin cnt:\t",len(bin)-1, '\n')           # shows the number of bins
+print("obs bin lbl:\t", sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
 
 
 # jenks
 edge, bin, bin_label = observations_jenks(observations, 4)
 
-print(sorted(edge), '\n\n')         # shows the bin (upper and lower bound) that the observation will be put in
-print(bin.astype(int), '\n\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
-print(len(bin)-1, '\n\n')           # shows the number of bins
-print(sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
+
+print("obs count:\t", len(observations), '\n')
+print("obs edge:\t", sorted(edge), '\n')         # shows the bin (upper and lower bound) that the observation will be put in
+print("bins:\t\t", bin.astype(int), '\n')      # shows the bins (i.e. 5, 10, 15)  means there are 2 bins 5-10, 10-15
+print("bin cnt:\t",len(bin)-1, '\n')           # shows the number of bins
+print("obs bin lbl:\t", sorted(bin_label), '\n\n')    # shows the bin (label) that the observation will be put in - sorted
 
 ```
 
